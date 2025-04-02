@@ -90,9 +90,9 @@ pub struct QuerySearcher {}
 impl QuerySearcher {
     fn search(query: &str, content: &str) -> Vec<(usize, String)> {
         let mut matches: Vec<(usize, String)> = vec![];
-        for line in content.lines() {
+        for (index, line) in content.lines().enumerate() {
             if line.to_lowercase().contains(&query.to_lowercase()) {
-                matches.push((0, line.to_string()));
+                matches.push((index + 1, line.to_string()));
             }
         }
 
