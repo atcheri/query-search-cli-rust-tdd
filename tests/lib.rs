@@ -12,7 +12,7 @@ fn should_return_a_single_line_when_matched_with_single_line() {
     let lines = QuerySearcher::search(&query, &content);
 
     // assert
-    assert_eq!(lines, content)
+    assert_eq!(lines, vec![content])
 }
 
 #[test]
@@ -25,7 +25,7 @@ fn should_return_a_single_line_when_matched_with_another_line() {
     let lines = QuerySearcher::search(&query, &content);
 
     // assert
-    assert_eq!(lines, content);
+    assert_eq!(lines, vec![content]);
 }
 
 #[test]
@@ -51,7 +51,21 @@ fn should_return_a_single_line_when_matched_with_second_line() {
     let lines = QuerySearcher::search(&query, &content);
 
     // assert
-    assert_eq!(lines, "TDD rocks");
+    assert_eq!(lines, vec!["TDD rocks"]);
+}
+
+#[test]
+fn should_return_multiple_lines_when_matched_multiple_times() {
+    // arrange
+    let query = "TDD";
+    let content =
+        "First line without the word\nTDD rocks\nClean code is a must\nIn TDD, one must starts writing a failing test";
+
+    // act
+    let lines = QuerySearcher::search(&query, &content);
+
+    // assert
+    assert_eq!(lines, vec!["TDD rocks", "In TDD, one must starts writing a failing test"]);
 }
 
 pub struct QuerySearcher {}
