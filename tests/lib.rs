@@ -10,7 +10,7 @@ fn should_return_a_single_line_when_matched_with_single_line() {
     let lines = QuerySearcher::search(&query, &content);
 
     // assert
-    assert_eq!(lines, vec![(1, content)])
+    assert_eq!(lines, vec![(1, content.to_string())])
 }
 
 #[test]
@@ -23,7 +23,7 @@ fn should_return_a_single_line_when_matched_with_another_line() {
     let lines = QuerySearcher::search(&query, &content);
 
     // assert
-    assert_eq!(lines, vec![(1, content)]);
+    assert_eq!(lines, vec![(1, content.to_string())]);
 }
 
 #[test]
@@ -49,7 +49,7 @@ fn should_return_a_single_line_when_matched_with_second_line() {
     let lines = QuerySearcher::search(&query, &content);
 
     // assert
-    assert_eq!(lines, vec![(2, "TDD rocks")]);
+    assert_eq!(lines, vec![(2, "TDD rocks".to_string())]);
 }
 
 #[test]
@@ -65,7 +65,10 @@ fn should_return_multiple_lines_when_matched_multiple_times() {
     // assert
     assert_eq!(
         lines,
-        vec![(2, "TDD rocks"), (4, "In TDD, one must starts writing a failing test")]
+        vec![
+            (2, "TDD rocks".to_string()),
+            (4, "In TDD, one must starts writing a failing test".to_string())
+        ]
     );
 }
 
@@ -79,17 +82,17 @@ fn should_return_a_single_line_when_matched_with_single_line_and_case_insensitiv
     let lines = QuerySearcher::search(&query, &content);
 
     // assert
-    assert_eq!(lines, vec![(1, content)])
+    assert_eq!(lines, vec![(1, content.to_string())])
 }
 
 pub struct QuerySearcher {}
 
 impl QuerySearcher {
-    fn search(query: &str, content: &str) -> Vec<String> {
-        let mut matches = vec![];
+    fn search(query: &str, content: &str) -> Vec<(usize, String)> {
+        let mut matches: Vec<(usize, String)> = vec![];
         for line in content.lines() {
             if line.to_lowercase().contains(&query.to_lowercase()) {
-                matches.push(line.to_string());
+                matches.push((0, line.to_string()));
             }
         }
 
