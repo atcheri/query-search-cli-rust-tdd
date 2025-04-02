@@ -1,7 +1,5 @@
 use core::str;
 
-use assert_cmd::assert;
-
 #[test]
 fn should_return_a_single_line_when_matched_with_single_line() {
     // arrange
@@ -71,13 +69,14 @@ fn should_return_multiple_lines_when_matched_multiple_times() {
 pub struct QuerySearcher {}
 
 impl QuerySearcher {
-    fn search(query: &str, content: &str) -> String {
+    fn search(query: &str, content: &str) -> Vec<String> {
+        let mut matches = vec![];
         for line in content.lines() {
             if line.contains(query) {
-                return String::from(line);
+                matches.push(line.to_string());
             }
         }
 
-        String::from("")
+        return matches;
     }
 }
