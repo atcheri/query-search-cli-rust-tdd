@@ -7,7 +7,7 @@ fn should_return_a_single_line_when_matched_with_single_line() {
     let content = "TDD rocks";
 
     // act
-    let lines = QuerySearcher::search(&query, &content);
+    let lines = search_query(query, content);
 
     // assert
     assert_eq!(lines, vec![(1, content.to_string())])
@@ -20,7 +20,7 @@ fn should_return_a_single_line_when_matched_with_another_line() {
     let content = "Programming gets better with TDD";
 
     // act
-    let lines = QuerySearcher::search(&query, &content);
+    let lines = search_query(query, content);
 
     // assert
     assert_eq!(lines, vec![(1, content.to_string())]);
@@ -33,7 +33,7 @@ fn should_return_no_line_when_matched_with_none() {
     let content = "TDD rocks";
 
     // act
-    let lines = QuerySearcher::search(&query, &content);
+    let lines = search_query(query, content);
 
     // assert
     assert!(lines.is_empty());
@@ -46,7 +46,7 @@ fn should_return_a_single_line_when_matched_with_second_line() {
     let content = "First line without the word\nTDD rocks";
 
     // act
-    let lines = QuerySearcher::search(&query, &content);
+    let lines = search_query(query, content);
 
     // assert
     assert_eq!(lines, vec![(2, "TDD rocks".to_string())]);
@@ -60,7 +60,7 @@ fn should_return_multiple_lines_when_matched_multiple_times() {
         "First line without the word\nTDD rocks\nClean code is a must\nIn TDD, one must starts writing a failing test";
 
     // act
-    let lines = QuerySearcher::search(&query, &content);
+    let lines = search_query(query, content);
 
     // assert
     assert_eq!(
@@ -79,7 +79,7 @@ fn should_return_a_single_line_when_matched_with_single_line_and_case_insensitiv
     let content = "TDD rocks";
 
     // act
-    let lines = QuerySearcher::search(&query, &content);
+    let lines = search_query(query, content);
 
     // assert
     assert_eq!(lines, vec![(1, content.to_string())])
@@ -98,4 +98,8 @@ impl QuerySearcher {
 
         return matches;
     }
+}
+
+fn search_query(query: &str, content: &str) -> Vec<(usize, String)> {
+    QuerySearcher::search(&query, &content)
 }
