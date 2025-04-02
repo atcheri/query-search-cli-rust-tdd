@@ -1,5 +1,7 @@
 use core::str;
 
+use domain::{ FileReader, QuerySearcher };
+
 #[test]
 fn should_return_a_single_line_when_matched_with_single_line() {
     // arrange
@@ -89,34 +91,9 @@ struct FileReaderMock {
     lines: String,
 }
 
-pub trait FileReader {
-    fn read_to_string(&self, file_path: String) -> Result<String, ()>;
-}
-
 impl FileReader for FileReaderMock {
     fn read_to_string(&self, _file_path: String) -> Result<String, ()> {
         Ok(self.lines.clone())
-    }
-}
-
-pub struct QuerySearcher<F: FileReader> {
-    file_reader: F,
-}
-
-impl<F: FileReader> QuerySearcher<F> {
-    pub fn new(file_reader: F) -> Self {
-        QuerySearcher { file_reader: file_reader }
-    }
-
-    fn search(&self, query: &str, content: &str) -> Vec<(usize, String)> {
-        let mut matches: Vec<(usize, String)> = vec![];
-        for (index, line) in content.lines().enumerate() {
-            if line.to_lowercase().contains(&query.to_lowercase()) {
-                matches.push((index + 1, line.to_string()));
-            }
-        }
-
-        return matches;
     }
 }
 
