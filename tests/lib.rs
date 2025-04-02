@@ -85,7 +85,7 @@ impl QuerySearcher {
     fn search(query: &str, content: &str) -> Vec<String> {
         let mut matches = vec![];
         for line in content.lines() {
-            if line.contains(query) {
+            if line.to_lowercase().contains(&query.to_lowercase()) {
                 matches.push(line.to_string());
             }
         }
