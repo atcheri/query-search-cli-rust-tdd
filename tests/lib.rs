@@ -66,6 +66,19 @@ fn should_return_multiple_lines_when_matched_multiple_times() {
     assert_eq!(lines, vec!["TDD rocks", "In TDD, one must starts writing a failing test"]);
 }
 
+#[test]
+fn should_return_a_single_line_when_matched_with_single_line_and_case_insensitive() {
+    // arrange
+    let query = "tdd";
+    let content = "TDD rocks";
+
+    // act
+    let lines = QuerySearcher::search(&query, &content);
+
+    // assert
+    assert_eq!(lines, vec![content])
+}
+
 pub struct QuerySearcher {}
 
 impl QuerySearcher {
