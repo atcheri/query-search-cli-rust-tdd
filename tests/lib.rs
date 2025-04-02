@@ -45,6 +45,10 @@ pub struct QuerySearcher {}
 
 impl QuerySearcher {
     fn search(query: &str, content: &str) -> String {
+        if !content.contains(query) {
+            return String::from("");
+        }
+
         String::from(content)
     }
 }
