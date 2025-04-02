@@ -85,10 +85,30 @@ fn should_return_a_single_line_when_matched_with_single_line_and_case_insensitiv
     assert_eq!(lines, vec![(1, content.to_string())])
 }
 
-pub struct QuerySearcher {}
+struct FileReaderMock {
+    lines: String,
+}
 
-impl QuerySearcher {
-    fn search(query: &str, content: &str) -> Vec<(usize, String)> {
+pub trait FileReader {
+    fn read_to_string(&self, file_path: String) -> Result<String, ()>;
+}
+
+impl FileReader for FileReaderMock {
+    fn read_to_string(&self, _file_path: String) -> Result<String, ()> {
+        Ok(self.lines.clone())
+    }
+}
+
+pub struct QuerySearcher<F: FileReader> {
+    file_reader: F,
+}
+
+impl<F: FileReader> QuerySearcher<F> {
+    pub fn new(file_reader: F) -> Self {
+        QuerySearcher { file_reader: file_reader }
+    }
+
+    fn search(&self, query: &str, content: &str) -> Vec<(usize, String)> {
         let mut matches: Vec<(usize, String)> = vec![];
         for (index, line) in content.lines().enumerate() {
             if line.to_lowercase().contains(&query.to_lowercase()) {
@@ -101,5 +121,9 @@ impl QuerySearcher {
 }
 
 fn search_query(query: &str, content: &str) -> Vec<(usize, String)> {
-    QuerySearcher::search(&query, &content)
+    let file_reader_mock = FileReaderMock {
+        lines: content.to_string(),
+    };
+
+    QuerySearcher::new(file_reader_mock).search(&query, &content)
 }
