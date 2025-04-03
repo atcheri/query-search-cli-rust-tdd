@@ -20,6 +20,10 @@ fn main() {
         &config.file_path
     );
 
+    print_lines(lines_result);
+}
+
+fn print_lines(lines_result: Result<Vec<(usize, String)>, String>) {
     match lines_result {
         Ok(lines) => {
             lines.iter().for_each(|(line_nr, line)| println!("{}: {}", line_nr, line));
