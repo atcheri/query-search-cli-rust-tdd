@@ -23,3 +23,15 @@ fn should_print_multiple_lines_when_matche_with_multiple() {
             )
         );
 }
+
+#[test]
+fn should_fail_when_no_file_is_specified() {
+    let mut cmd = Command::cargo_bin("cli").unwrap();
+
+    cmd.arg("happiness")
+        .assert()
+        .failure()
+        .stderr(
+            predicates::str::contains("Parsing arguments error: not enough arguments specified")
+        );
+}
