@@ -12,14 +12,19 @@ impl FileReader for SystemFileReader {
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    let config = Config::new(args).unwrap_or_else(|err| {
-        eprintln!("Parsing arguments error: {}", err);
-        std::process::exit(1);
-    });
+
+    let config = parse_conf(args);
 
     let lines = QuerySearcher::new(SystemFileReader).search(&config.query, &config.file_path);
 
     lines.iter().for_each(|(line_nr, line)| println!("{}: {}", line_nr, line));
+}
+
+fn parse_conf(args: Vec<String>) -> Config {
+    Config::new(args).unwrap_or_else(|err| {
+        eprintln!("Parsing arguments error: {}", err);
+        std::process::exit(1);
+    })
 }
 
 pub struct Config {
