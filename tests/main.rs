@@ -35,3 +35,14 @@ fn should_fail_when_no_file_is_specified() {
             predicates::str::contains("Parsing arguments error: not enough arguments specified")
         );
 }
+
+#[test]
+fn should_fail_when_no_args_are_specified() {
+    let mut cmd = Command::cargo_bin("cli").unwrap();
+
+    cmd.assert()
+        .failure()
+        .stderr(
+            predicates::str::contains("Parsing arguments error: not enough arguments specified")
+        );
+}
