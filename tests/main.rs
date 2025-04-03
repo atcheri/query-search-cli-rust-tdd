@@ -46,3 +46,18 @@ fn should_fail_when_no_args_are_specified() {
             predicates::str::contains("Parsing arguments error: not enough arguments specified")
         );
 }
+
+#[test]
+fn should_fail_when_no_file_exists() {
+    let mut cmd = Command::cargo_bin("cli").unwrap();
+
+    cmd.arg("joyful life")
+        .arg("./tests/non_existing_file.txt")
+        .assert()
+        .failure()
+        .stderr(
+            predicates::str::contains(
+                "Application error: The system cannot find the file specified"
+            )
+        );
+}

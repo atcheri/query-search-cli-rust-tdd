@@ -5,8 +5,8 @@ use domain::{ FileReader, QuerySearcher };
 pub struct SystemFileReader;
 
 impl FileReader for SystemFileReader {
-    fn read_to_string(&self, file_path: String) -> Result<String, ()> {
-        fs::read_to_string(file_path).map_err(|_| ())
+    fn read_to_string(&self, file_path: String) -> Result<String, String> {
+        fs::read_to_string(file_path).map_err(|err| err.to_string())
     }
 }
 
@@ -15,9 +15,20 @@ fn main() {
 
     let config = parse_conf(args);
 
-    let lines = QuerySearcher::new(SystemFileReader).search(&config.query, &config.file_path);
+    let lines_result = QuerySearcher::new(SystemFileReader).search(
+        &config.query,
+        &config.file_path
+    );
 
-    lines.iter().for_each(|(line_nr, line)| println!("{}: {}", line_nr, line));
+    match lines_result {
+        Ok(lines) => {
+            lines.iter().for_each(|(line_nr, line)| println!("{}: {}", line_nr, line));
+        }
+        Err(err) => {
+            eprintln!("Application error: {}", err);
+            std::process::exit(1);
+        }
+    }
 }
 
 fn parse_conf(args: Vec<String>) -> Config {

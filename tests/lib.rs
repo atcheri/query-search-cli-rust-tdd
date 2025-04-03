@@ -92,7 +92,7 @@ struct FileReaderMock {
 }
 
 impl FileReader for FileReaderMock {
-    fn read_to_string(&self, _file_path: String) -> Result<String, ()> {
+    fn read_to_string(&self, _file_path: String) -> Result<String, String> {
         Ok(self.lines.clone())
     }
 }
@@ -102,5 +102,5 @@ fn search_query(query: &str, content: &str) -> Vec<(usize, String)> {
         lines: content.to_string(),
     };
 
-    QuerySearcher::new(file_reader_mock).search(&query, &content)
+    QuerySearcher::new(file_reader_mock).search(&query, &content).unwrap()
 }
