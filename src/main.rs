@@ -16,7 +16,7 @@ fn main() {
 
     let lines = QuerySearcher::new(SystemFileReader).search(&config.query, &config.file_path);
 
-    print!("{}: {}", lines[0].0, lines[0].1)
+    lines.iter().for_each(|(line_nr, line)| println!("{}: {}", line_nr, line));
 }
 
 pub struct Config {
